@@ -12,87 +12,132 @@ int char_print (FILE *fp, const void * elem);
 
 int main() {
 
-    int i;
-    Stack *stack;
-    char word[LEN_WORD];
+   int i;
+   Stack *stack;
+   char word[LEN_WORD+1];
 
-    Point *p[TOT_POINTS];
+   Point *p[TOT_POINTS];
 
-    p[0] = point_new (0, 0, WALL);
-    p[1] = point_new (0, 1, SPACE);
-    p[2] = point_new (0, 2, IN);
+   p[0] = point_new (0, 0, WALL);
+   p[1] = point_new (0, 1, SPACE);
+   p[2] = point_new (0, 2, IN);
 
-    stack = stack_new();
+   puts("Array de puntos inicial:");
 
-    for (i=0; i<TOT_POINTS; i++) {
+   for (i=0; i<TOT_POINTS; i++) {
 
-        if(!p[i]) {
-            return 0;
-        }
+       if(!p[i]) {
+           return 0;
+       }
 
-        if(stack_push(stack, p[i]) == ERROR) {
-            return 0;
-        }
-    }
+       if(point_print(stdout, p[i]) <0 ) {
+           return 0;
+       }
+   }
 
-    stack_print(stdout, stack, point_print);
+   stack = stack_new();
 
-    do_empty_stack(stdout, stack, point_print);
+   for (i=0; i<TOT_POINTS; i++) {
 
-    strcpy(word, 'hola');
+       if(!p[i]) {
+           return 0;
+       }
 
-    for (i=0; i<LEN_WORD; i++) {
-        
-        if(stack_push(stack, (void*)word[i]) == ERROR) {
-            return 0;
+       if(stack_push(stack, p[i]) == ERROR) {
+           return 0;
+       }
+   }
 
-        }
-    }
+   puts("Pila de puntos inicial:");
 
-    stack_print(stdout, stack, char_print);
+   stack_print(stdout, stack, point_print);
 
-    do_empty_stack(stdout, stack, char_print);
+   do_empty_stack(stdout, stack, point_print);
 
-    return 0;
+   strcpy(word, "hola");
+
+   puts("\nArray de chars inicial:");
+
+   for (i=0; i<LEN_WORD; i++) {
+
+       if(!(word+i)) {
+           return 0;
+       }
+
+       if(char_print(stdout, word+i) <0 ) {
+           return 0;
+       }
+   }
+
+   for (i=0; i<LEN_WORD; i++) {
+       
+       if(stack_push(stack, (void*)(word+i)) == ERROR) {
+           stack_free(stack);
+           for(i=0; i<TOT_POINTS; i++){
+               point_free(p[i]);
+           }
+           
+           return 0;
+
+       }
+   }   
+   
+   puts("Pila de chars inicial:");
+
+   stack_print(stdout, stack, char_print);
+
+   do_empty_stack(stdout, stack, char_print);
+
+   stack_free(stack);
+   
+   for(i=0; i<TOT_POINTS; i++){
+       point_free(p[i]);
+   }
+
+   return 0;
 }
 
 void do_empty_stack (FILE *fp, Stack *s, print_elem_fn print_elem) {
 
-    int i, tot_elem;
-    void* removed;
+   int i, tot_elem;
+   void* removed;
 
-    if (!fp || !s || stack_isEmpty(s)) {
+   fprintf(stdout, "Extrayendo elementos de la pila:\n");
 
-        return;
-        
-    }
+   if (!fp || !s || stack_isEmpty(s)) {
 
-    tot_elem = stack_count(s);
+       return;
+       
+   }
 
-    for (i=0; i<tot_elem; i++) {
+   tot_elem = stack_count(s);
 
-        removed = stack_pop(s);
+   for (i=0; i<tot_elem; i++) {
 
-        if (!removed) {
-            return;
-        }
+       removed = stack_pop(s);
 
-        print_elem (stdout, removed);
+       if (!removed) {
+           return;
+       }
 
-    }
+       print_elem (stdout, removed);
+
+   }
+
+   fprintf(stdout, "\nPila final: \nSIZE:%d\n", stack_count(s));
 
 }
 
 int char_print (FILE *fp, const void * elem) {
 
-    char *charr=NULL;
-    
-    if (!fp || !elem) {
-        return ERROR;
-    }
+   char *charr=NULL;
+   
+   if (!fp || !elem) {
+       return ERROR;
+   }
 
-    charr = (char*)elem;
+   charr = (char*)elem;
 
-    return fprintf (stdout, "%c", elem);
+   return fprintf (stdout, "%c\n", *charr);
 
 }
