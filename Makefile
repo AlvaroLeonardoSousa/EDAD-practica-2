@@ -7,7 +7,7 @@ LIBS = -lm -pthread
 
 .PHONY: clean_objects clean_program clean all
 
-all: p2_e1
+all: p2_e1 p2_e2 p2_e3
 
 ##############################################
 
@@ -17,10 +17,20 @@ p2_e1: p2_e1.o maze.o libstack.a
 p2_e1.o: p2_e1.c stack.h maze.h
 	$(CC) $(CFLAGS) -c $<
 
+p2_e2: p2_e2.o maze.o libstack.a
+	$(CC) -o $@ $^ $(CLIB) $(LIBS)
+
+p2_e2.o: p2_e2.c stack.h maze.h
+	$(CC) $(CFLAGS) -c $<
+
 maze.o: maze.c maze.h
 	$(CC) $(CFLAGS) -c $<
 
+p2_e3: p2_e3.o maze.o search.o libstack.a
+	$(CC) -o $@ $^ $(CLIB) $(LIBS)
 
+search.o: search.c stack.h maze.h
+	$(CC) $(CFLAGS) -c $<
 
 #################################################
 
@@ -30,6 +40,6 @@ clean_objects:
 
 clean_program:
 	@echo "Cleaning program..."
-	@rm -f p2_e1
+	@rm -f p2_e1 p2_e2 p2_e3
 
 clean: clean_objects clean_program
