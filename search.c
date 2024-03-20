@@ -1,65 +1,77 @@
-/**
-* @brief it defines the DFS function
-*
-* @file search.c
-* @version 1
-* @authors Álvaro Leonardo & Diego Tabero
-*/
-
+#include "stack.h"
 #include "search.h"
-
-#include <stdbool.h>
+#include "string.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include <limits.h>
 
-Point *maze_dfs(Maze *m) {
+/**
+ * The function maze_dfs performs a depth-first search in a maze to find a path from the entrance to
+ * the exit.
+ * 
+ * @param m Maze structure containing information about the maze, including the start and end points,
+ * walls, and neighbors of each point.
+ * 
+ * @return The `maze_dfs` function is returning a `Point` pointer. If the function successfully finds a
+ * path from the entrance to the exit in the maze, it will return a pointer to the exit `Point`. If no
+ * path is found or an error occurs during the process, it will return `NULL`.
+ */
+Point *maze_dfs(Maze *m)
+{
 
-    Point *p = NULL, *pn = NULL, *p1 = maze_getIn(m), *p2 = maze_getOut(m);
-    Stack *s = stack_new();
+    Stack *s;
+    Point *p = NULL, *pi = NULL, *po = NULL, *paux = NULL;
+    pi = maze_getIn(m);
+    po = maze_getOut(m);
     int i;
 
-    if (!m || !s || !p1 || !p2) {
+    s = stack_new();
+
+    if (!s)
+    {
         return NULL;
     }
 
-    if (stack_push(s, p1) != OK) {
+    if (stack_push(s, (void *)pi) == ERROR)
+    {
+        stack_free(s);
         return NULL;
     }
 
-    while (p != p2 && !stack_isEmpty(s)) {
+    while (p != po && stack_isEmpty(s) == false)
+    {
 
-        p = stack_pop(s);
+        p = (Point *)stack_pop(s);
 
-        if (!p) {
-            return NULL;
-        }
-
-        if (point_getVisited(p) == false) {
+        if (point_getVisited(p) == false)
+        {
 
             point_setVisited(p, true);
 
             point_print(stdout, p);
 
-            for (i = 0; i < 4; i++) {
+            for (i = 0; i < 4; i++)
+            {
+                paux = maze_getNeighbor(m, p, i);
 
-                pn = maze_getNeighbor(m, p, i);
+                if (point_getVisited(paux) == false && point_getSymbol(paux) != WALL && paux!=NULL)
+                {
 
-                if (pn != NULL && point_getSymbol(pn) != WALL && point_getVisited(pn) == false) {
-
-                    if (stack_push(s, pn) != OK) {
+                    if ((stack_push(s, (void *)paux)) == ERROR)
+                    {
+                        stack_free(s);
                         return NULL;
                     }
                 }
             }
-        } 
-    }
+        }
 
+    }   
     stack_free(s);
 
-    if (p == p2) {
+    if (p == po)
+    {
         return p;
     }
 
     return NULL;
-  
 }

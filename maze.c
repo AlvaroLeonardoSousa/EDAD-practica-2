@@ -280,6 +280,8 @@ void maze_free(Maze *maze)
 
    int i;
 
+
+
    for (i = 0; i < maze->nrows; i++)
    {
         if (maze->map[i])
@@ -383,9 +385,8 @@ Status maze_setIn(Maze *maze, int x, int y){
        return ERROR;
    }
 
-    maze->in=maze_getPoint(maze, x, y);
-
-    point_setSymbol(maze->out, IN);
+   maze->in=maze_getPoint(maze,x,y);
+   point_setSymbol(maze->in, IN);
 
    return OK;
 
@@ -399,10 +400,8 @@ Status maze_setOut(Maze *maze, int x, int y){
        return ERROR;
    }
 
-   
-    maze->out=maze_getPoint(maze, x, y);
-
-    point_setSymbol(maze->out, OUT);
+   maze->out=maze_getPoint(maze, x,y);
+   point_setSymbol(maze->out, OUT);
 
    return OK;
 
@@ -437,7 +436,7 @@ Point *maze_getNeighbor(const Maze *maze, const Point *p, direction dir){
 
    if (dir == RIGHT) {
 
-       if(maze_checkCoordinates(maze, p->x, p->y+1) == ERROR){
+       if(maze_checkCoordinates(maze, p->x, p->y+1)==ERROR){
 
         return NULL;
 
@@ -454,7 +453,7 @@ Point *maze_getNeighbor(const Maze *maze, const Point *p, direction dir){
 
    if (dir == UP) {
 
-    if(maze_checkCoordinates(maze, p->x-1, p->y) == ERROR){
+    if(maze_checkCoordinates(maze, p->x-1, p->y)==ERROR){
 
         return NULL;
 
@@ -471,7 +470,7 @@ Point *maze_getNeighbor(const Maze *maze, const Point *p, direction dir){
 
    if (dir == LEFT) {
 
-        if(maze_checkCoordinates(maze, p->x, p->y-1) == ERROR){
+        if(maze_checkCoordinates(maze, p->x, p->y-1)==ERROR){
 
         return NULL;
 
@@ -488,7 +487,7 @@ Point *maze_getNeighbor(const Maze *maze, const Point *p, direction dir){
 
    if (dir == DOWN) {
 
-    if(maze_checkCoordinates(maze, p->x+1, p->y) == ERROR){
+    if(maze_checkCoordinates(maze, p->x+1, p->y)==ERROR){
 
         return NULL;
 
@@ -516,7 +515,6 @@ Status maze_checkCoordinates(const Maze *maze, int x, int y){
    return OK;
 
 }
-
 
 int maze_getNrows(const Maze *maze){return maze->nrows;}
 

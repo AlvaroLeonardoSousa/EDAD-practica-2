@@ -1,21 +1,16 @@
-/**
-* @brief it defines the DFS function definition
-*
-* @file search.h
-* @version 1
-* @authors Álvaro Leonardo & Diego Tabero
-*/
 
 #include "maze.h"
-#include "types.h"
-#include "stack.h"
+
 
 /**
-* @brief it searches for a path in a maze using the DFS algorithm
-* @author Álvaro Leonardo & Diego Tabero
-
-* @param m pointer to the maze
-* @version 1
-* @authors Álvaro Leonardo & Diego Tabero
-*/
+ * The function maze_dfs performs a depth-first search in a maze to find a path from the entrance to
+ * the exit.
+ * 
+ * @param m Maze structure containing information about the maze, including the start and end points,
+ * walls, and neighbors of each point.
+ * 
+ * @return The `maze_dfs` function is returning a `Point` pointer. If the function successfully finds a
+ * path from the entrance to the exit in the maze, it will return a pointer to the exit `Point`. If no
+ * path is found or an error occurs during the process, it will return `NULL`.
+ */
 Point *maze_dfs(Maze *m);

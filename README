@@ -1,0 +1,11 @@
+
+-----Diego Tabero y Alvaro Leonardo Sousa-----
+
+Ejercicio 4 (Opcional) libstack2.a Pila Redimensionable
+
+--Ir al makefile y hacer make alls  para compilar todos los ficheros y enlazarlo con la biblioteca creada con nuestra implementación para la pila redimensionable
+
+
+Ejercicio 2 (Opcional) 
+
+--Ir al makefile y hacer make p2_e1extra (Funciones de comparación y qsort)

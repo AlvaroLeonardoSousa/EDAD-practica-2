@@ -29,7 +29,7 @@ bool balanced_expression(const char *expr, int *pos, bool verbose){
         return ERROR;
     }
 
-    for(*pos=0; *pos<length && flag==OK ;(*pos)++){
+    for(*pos=0; *pos<length && flag==OK ; (*pos)++){
 
         if(isOpeningBracket(expr[*pos])==true && verbose==true){
 
@@ -37,28 +37,30 @@ bool balanced_expression(const char *expr, int *pos, bool verbose){
             stack_print(stdout, stack, char_print);
 
         }
+
         else if(isOpeningBracket(expr[*pos])==true && verbose==false){   
 
             flag=stack_push(stack, (void *)&expr[*pos]);
             
         }
+
         else if((isClosingBracket(expr[*pos]))==true && verbose==true && !stack_isEmpty(stack)){
             bracket=*(char *)stack_pop(stack);
             if(arePaired(bracket, expr[*pos])==false){
                 flag=ERROR;
-                break;
             }
             stack_print(stdout, stack, char_print);
 
         }
+
         else if((isClosingBracket(expr[*pos]))==true && verbose==false && !stack_isEmpty(stack)){
             bracket=*(char *)stack_pop(stack);
             if(arePaired(bracket, expr[*pos])==false){
                 flag=ERROR;
-                break;
             }
 
         }
+
         else if(stack_isEmpty(stack) && (isClosingBracket(expr[*pos]))){
             flag=ERROR;
         }
@@ -79,13 +81,11 @@ bool balanced_expression(const char *expr, int *pos, bool verbose){
     }
 }
 
-
-
 bool isClosingBracket(char bracket){
 
 
     if(!bracket){
-        return ERROR;
+        return false;
     }
 
     if(bracket == ']' || bracket == '}' ||bracket == ')'){
@@ -98,13 +98,10 @@ bool isClosingBracket(char bracket){
 
 }
 
-
-
-
 bool isOpeningBracket(char bracket){
 
     if(!bracket){
-        return ERROR;
+        return false;
     }
 
     if(bracket == '[' || bracket == '{' ||bracket == '('){
@@ -141,22 +138,22 @@ int char_print (FILE *fp, const void * elem) {
 
     charr = (char*)elem;
 
-    return fprintf (stdout, "%c ", *charr);
+    return fprintf(stdout, "%c ", *charr);
 
 }
-
 
 int main(int argc, char *argv[]){
 
 
     char *str;
     bool verbose=false;
-    int pos=0, i;
+    int pos=0, i, length;
 
-
-    if(!argv[1]){
+    if(argc<1 || argc>3){
         return ERROR;
     }
+
+    /*Check if the verbose mode is active*/
 
     if(argv[2]){
         if(!strcasecmp("-v",argv[2])){
@@ -166,17 +163,20 @@ int main(int argc, char *argv[]){
 
     str=argv[1];
 
+    length=strlen(str);
+
     if(balanced_expression(argv[1], &pos ,verbose)){
-        fprintf(stdout, "It is balanced");
+        fprintf(stdout, "It's balanced\n");
     }
     else{
-        fprintf(stdout, "%s is not balanced in %i position", argv[1], pos);
+        fprintf(stdout, "%s is unbalanced in %d position: \n", argv[1], pos);
 
-        for(i=0; i<pos; i++){
+        for(i=0; i<length; i++){
 
             fprintf(stdout, "%c", str[i]);
 
-            if(i==pos){
+
+            if(i==pos-1){
                 fprintf(stdout, "****");
             }
 
