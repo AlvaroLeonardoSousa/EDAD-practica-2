@@ -39,11 +39,23 @@ typedef int (*compare_elem_fn)(const void *elem1, const void *elem2);
 the first two cases, should they allocate memory or not? or should we have two
 versions to allow for both options? */
 
+/* HERE ARE TWO EXAMPLES */
 /* function type to convert strings to elements of the appropriate type */
 /* the functions should allocate memory for the element */
 typedef void *(*elem_from_string_fn)(const char *str);
 
 /* generic function type to process an element */
 typedef void (*process_elem_fn)(const void *element);
+
+/* PROTOTYPES FOR SPECIFIC FUNCTIONS OF THESE TYPES*/
+int int_print(FILE *pf, const void *a);
+int char_print(FILE *pf, const void *a);
+
+int string_print(FILE *fp, const void *p);
+
+int str_cmp(const void *elem1, const void *elem2);
+int int_cmp(const void *elem1, const void *elem2);
+
+
 
 #endif

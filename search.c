@@ -1,6 +1,7 @@
 #include "stack.h"
 #include "search.h"
 #include "string.h"
+#include "queue.h"
 #include <stdio.h>
 #include <limits.h>
 
@@ -75,3 +76,67 @@ Point *maze_dfs(Maze *m)
 
     return NULL;
 }
+
+Point *maze_bfs(Maze *m)
+{
+
+    Queue *q;
+    Point *p = NULL, *pi = NULL, *po = NULL, *paux = NULL;
+    pi = maze_getIn(m);
+    po = maze_getOut(m);
+    int i;
+
+    q = queue_new();
+
+    if (!q)
+    {
+        return NULL;
+    }
+
+    if (queue_push(q, (void *)pi) == ERROR)
+    {
+        queue_free(q);
+        return NULL;
+    }
+
+    while (p != po && queue_isEmpty(q) == false)
+    {
+
+        p = (Point *)queue_pop(q);
+
+        if (point_getVisited(p) == false)
+        {
+
+            point_setVisited(p, true);
+
+            point_print(stdout, p);
+
+            for (i = 0; i < 4; i++)
+            {
+                paux = maze_getNeighbor(m, p, i);
+
+                if (point_getVisited(paux) == false && point_getSymbol(paux) != WALL && paux!=NULL)
+                {
+
+                    if ((queue_push(q, (void *)paux)) == ERROR)
+                    {
+                        queue_free(q);
+                        return NULL;
+                    }
+                }
+            }
+        }
+
+    }   
+
+
+    
+    queue_free(q);
+
+    if (p == po)
+    {
+        return p;
+    }
+
+    return NULL;
+}   
